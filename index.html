@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Filing Forensics - how a financial case study gets built</title>
+<meta name="description" content="A research schematic plus working tools for finding and dissecting SEC filings, built around the Amazon (Chapter 8) case.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-base=".">
+<header class="site-head"><div class="wrap">
+  <div class="brand">Filing <b>Forensics</b></div>
+  <nav class="nav">
+    <a href="index.html" class="active">Schematic</a>
+    <a href="finder.html">Report Finder</a>
+    <a href="dissector.html">Filing Dissector</a>
+    <a href="#case">The Case</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="hero">
+    <p class="kicker">ISTM 476 · A research method you can actually run</p>
+    <h1>How a company case study gets built, one phase at a time.</h1>
+    <p class="lede">This is the path from a blank page to a sourced financial argument: scope the question,
+    mine the assigned reading, find the filings, pull the numbers, chart them, and synthesize. The two
+    middle steps are live tools. Everything traces to a real source, so the work is legible, not magic.</p>
+  </div>
+
+  <section>
+    <h2>The pipeline</h2>
+    <div class="rail">
+
+      <div class="node inputs">
+        <h3>Inputs</h3>
+        <p>The assigned chapter, the assignment rubric, and (for a team) the agreed scope. Read all three before writing anything.</p>
+      </div>
+      <div class="connector"></div>
+
+      <div class="node">
+        <div class="badge">0</div>
+        <h3>Scope the deliverable <span class="scope in">in scope</span></h3>
+        <p>Decide exactly what the section has to answer. Here: two to four lessons other firms can copy. Out of that falls a skeleton of claims, no numbers yet.</p>
+      </div>
+      <div class="connector"></div>
+
+      <div class="node">
+        <div class="badge">1</div>
+        <h3>Mine the primary text <span class="scope in">in scope</span></h3>
+        <p>Pull the raw claim for each lesson straight from the chapter. This is the spine that matches the assignment, and most of the time it is enough on its own.</p>
+      </div>
+      <div class="connector"></div>
+
+      <div class="node fork">
+        <div class="badge">!</div>
+        <h3>The fork: stop, or verify with numbers?</h3>
+        <p>After mining the text you choose how deep to go. Both are real research. Only one matches a book-discussion assignment.</p>
+        <div class="paths">
+          <div class="path"><b>Stay in scope</b>Write the chapter-only version. Short, safe, on-assignment.</div>
+          <div class="path outp"><b>Go deeper (out of scope)</b>Verify every claim against the filings and chart it. Rigorous, and easy to over-build past what was asked.</div>
+        </div>
+      </div>
+      <div class="connector"></div>
+
+      <div class="node">
+        <div class="badge">2</div>
+        <h3>Find the reports <span class="scope out">deeper</span></h3>
+        <p>Locate the company's SEC filings: the 10-K (annual), 10-Q (quarterly), 8-K (events). The Report Finder does this live against EDGAR.</p>
+        <a class="tool-link" href="finder.html">Open the Report Finder</a>
+      </div>
+      <div class="connector"></div>
+
+      <div class="node">
+        <div class="badge">3</div>
+        <h3>Dissect the filing <span class="scope out">deeper</span></h3>
+        <p>Pull the line items into a time series and compute the instruments: operating margin, capex intensity, the cash conversion cycle. The Dissector does this on bundled companies or any filing you drop in.</p>
+        <a class="tool-link" href="dissector.html">Open the Filing Dissector</a>
+      </div>
+      <div class="connector"></div>
+
+      <div class="node">
+        <div class="badge">4</div>
+        <h3>Chart and synthesize <span class="scope out">deeper</span></h3>
+        <p>Turn the verified series into exhibits, then find the one idea underneath them. For Amazon that idea is that every moat is also the liability bolted to it.</p>
+      </div>
+      <div class="connector"></div>
+
+      <div class="node">
+        <div class="badge">5</div>
+        <h3>Produce and source <span class="scope in">always</span></h3>
+        <p>Lay it out, and keep the sources in tiers: from the chapter, verified in the filings, or flagged as outside estimate. A reader should always know which is which.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="case">
+    <h2>The case behind the tools</h2>
+    <div class="card">
+      <p style="margin-top:0">These tools were factored out of one assignment: the lessons section of an Amazon case (Gallaugher, Chapter 8).
+      The chapter argues four transferable lessons, and the deep version verified each against Amazon's SEC filings.
+      That verification is what the Report Finder and Filing Dissector let you reproduce for yourself.</p>
+      <div class="metricgrid" style="margin-bottom:0">
+        <div class="metric"><div class="v">1</div><div class="k">Cost centre becomes the product</div></div>
+        <div class="metric"><div class="v">2</div><div class="k">The product isn't the product</div></div>
+        <div class="metric"><div class="v">3</div><div class="k">Patience as a moat</div></div>
+        <div class="metric"><div class="v">4</div><div class="k">The flywheel is moat and rot</div></div>
+      </div>
+      <p class="small muted" style="margin-bottom:0">Try it: open the Dissector, load Amazon, and watch the cash conversion cycle sit near minus fifty days.
+      That negative number is lesson three made concrete: Amazon is paid before it pays, so growth funds itself.</p>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <span>Filing Forensics · data from SEC EDGAR (public domain)</span>
+  <span>A teaching tool · sources traced, numbers verifiable</span>
+</div></footer>
+</body>
+</html>

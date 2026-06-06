@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Filing Dissector · Filing Forensics</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-base=".">
+<header class="site-head"><div class="wrap">
+  <div class="brand">Filing <b>Forensics</b></div>
+  <nav class="nav">
+    <a href="index.html">Schematic</a>
+    <a href="finder.html">Report Finder</a>
+    <a href="dissector.html" class="active">Filing Dissector</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="hero" style="padding-bottom:0">
+    <p class="kicker">Phase 3 · Dissect the filing</p>
+    <h1>Turn a filing into a time series and read the instruments.</h1>
+    <p class="lede">Load a bundled company to start instantly, or drop in any company's <span class="mono">companyfacts.json</span>
+    from SEC EDGAR. The tool builds an annual series and computes the same instruments used in the Amazon note:
+    operating margin, capex intensity, and the cash conversion cycle.</p>
+  </div>
+
+  <section>
+    <h2>1 · Load a company</h2>
+    <div class="toolbar">
+      <span class="small muted">Bundled (instant):</span>
+      <span class="chips" id="bundled"></span>
+    </div>
+    <div id="drop" class="dropzone">
+      <b>Or drop a companyfacts.json here</b> (or click to choose a file).<br>
+      <span class="small">Get one from <a href="finder.html">the Report Finder</a> &rarr; the companyfacts link, or
+      <a href="https://www.sec.gov/search-filings" target="_blank" rel="noopener">SEC EDGAR</a>. Parsed entirely in your browser.</span>
+      <input type="file" id="file" accept="application/json,.json" class="hidden">
+    </div>
+    <p class="status" id="status"></p>
+  </section>
+
+  <section id="results" class="hidden">
+    <h2 id="resTitle">Results</h2>
+    <div class="metricgrid" id="metrics"></div>
+
+    <div class="toolbar">
+      <label class="small muted" for="metricSel">Chart:</label>
+      <select id="metricSel">
+        <option value="revenue">Revenue ($B)</option>
+        <option value="op_margin">Operating margin (%)</option>
+        <option value="net_income">Net income ($B)</option>
+        <option value="capex_intensity">Capex intensity (% of revenue)</option>
+        <option value="ccc">Cash conversion cycle (days)</option>
+      </select>
+    </div>
+    <div class="chartbox"><canvas id="chart" height="120"></canvas></div>
+    <div class="note" id="lessonNote"></div>
+
+    <h2 style="margin-top:30px">The full series</h2>
+    <div class="tablewrap" id="tablewrap"></div>
+    <p class="small muted" id="srcNote" style="margin-top:10px"></p>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <span>Filing Forensics · data from SEC EDGAR (public domain)</span>
+  <span>Instruments computed in-browser · verifiable against the filing</span>
+</div></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="js/sec.js"></script>
+<script src="js/dissector.js"></script>
+</body>
+</html>

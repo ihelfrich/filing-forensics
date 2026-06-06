@@ -1,0 +1,65 @@
+[
+{
+"ticker": "AMZN",
+"cik": 1018724,
+"title": "Amazon.com, Inc.",
+"years": [
+2009,
+2025
+]
+},
+{
+"ticker": "WMT",
+"cik": 104169,
+"title": "Walmart Inc.",
+"years": [
+2009,
+2026
+]
+},
+{
+"ticker": "MSFT",
+"cik": 789019,
+"title": "Microsoft Corporation",
+"years": [
+2009,
+2025
+]
+},
+{
+"ticker": "GOOGL",
+"cik": 1652044,
+"title": "Alphabet Inc.",
+"years": [
+2013,
+2025
+]
+},
+{
+"ticker": "FDX",
+"cik": 1048911,
+"title": "FedEx Corporation",
+"years": [
+2009,
+2025
+]
+},
+{
+"ticker": "UPS",
+"cik": 1090727,
+"title": "United Parcel Service, Inc.",
+"years": [
+2009,
+2025
+]
+},
+{
+"ticker": "TGT",
+"cik": 27419,
+"title": "Target Corporation",
+"years": [
+2009,
+2026
+]
+}
+]

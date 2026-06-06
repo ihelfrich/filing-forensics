@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Report Finder · Filing Forensics</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-base=".">
+<header class="site-head"><div class="wrap">
+  <div class="brand">Filing <b>Forensics</b></div>
+  <nav class="nav">
+    <a href="index.html">Schematic</a>
+    <a href="finder.html" class="active">Report Finder</a>
+    <a href="dissector.html">Filing Dissector</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="hero" style="padding-bottom:0">
+    <p class="kicker">Phase 2 · Find the reports</p>
+    <h1>Find a company's SEC filings.</h1>
+    <p class="lede">Type a ticker or a company name. This queries the SEC EDGAR submissions API live and lists the
+    annual (10-K), quarterly (10-Q), and event (8-K) filings, each linked straight to the source on sec.gov.</p>
+  </div>
+
+  <section>
+    <form id="searchForm" class="toolbar" autocomplete="off">
+      <input type="search" id="q" placeholder="e.g. AMZN, or Amazon" aria-label="Company ticker or name">
+      <select id="formFilter" aria-label="Filing type">
+        <option value="10-K" selected>Annual (10-K)</option>
+        <option value="10-Q">Quarterly (10-Q)</option>
+        <option value="8-K">Events (8-K)</option>
+        <option value="ALL">All forms</option>
+      </select>
+      <button type="submit">Find filings</button>
+    </form>
+    <div class="chips" id="quickPicks"></div>
+    <p class="status" id="status"></p>
+
+    <div id="candidates"></div>
+
+    <div id="company" class="hidden">
+      <div class="card" id="companyHead" style="margin-bottom:14px"></div>
+      <div class="tablewrap" id="filings"></div>
+      <p class="small muted" id="filingHint" style="margin-top:10px"></p>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <span>Filing Forensics · data from SEC EDGAR (public domain)</span>
+  <span><a href="dissector.html">Next: dissect a filing &rarr;</a></span>
+</div></footer>
+
+<script src="js/sec.js"></script>
+<script src="js/finder.js"></script>
+</body>
+</html>

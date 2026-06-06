@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Workbench · Filing Forensics</title>
+<meta name="description" content="A forensic console for SEC filings. Resolve a company, inspect its annual XBRL series, calculate financial screens, and trace each reported input to its filing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-base=".">
+<header class="site-head"><div class="wrap">
+  <div class="brand">Filing <b>Forensics</b></div>
+  <nav class="nav" aria-label="Primary">
+    <a href="app.html" class="active" aria-current="page">Workbench</a>
+    <a href="finder.html">Report Finder</a>
+    <a href="dissector.html">Dissector</a>
+    <a href="index.html">Method</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="hero" style="padding-bottom:0">
+    <p class="kicker">Filing analysis</p>
+    <h1>Read the filing, then test the numbers.</h1>
+    <p class="lede">Resolve an SEC filer and inspect its annual XBRL series. The Workbench calculates margins, returns,
+    the working-capital cycle, free cash flow, and four common forensic screens: Altman Z″, Beneish M, Piotroski F,
+    and Sloan accruals. Thirty companies load from bundled data. For any other filer, use a proxy or load its
+    <span class="mono">companyfacts.json</span>. Each reported input links back to its XBRL tag and filing.</p>
+  </div>
+
+  <section>
+    <h2>Load a company</h2>
+    <form id="searchForm" class="toolbar" autocomplete="off">
+      <input type="search" id="q" placeholder="Ticker or company name" aria-label="Company ticker or name">
+      <button type="submit">Resolve</button>
+    </form>
+    <div id="candidates"></div>
+    <div id="bundled" style="margin:8px 0 4px"></div>
+
+    <div id="bridge" class="hidden"></div>
+    <div id="drop" class="dropzone">
+      <b>Drop a companyfacts.json here</b> or <button type="button" class="drop-pick" aria-describedby="dropHelp">choose a file</button>.<br>
+      <span class="small" id="dropHelp">Get the file from <a href="https://www.sec.gov/search-filings" target="_blank" rel="noopener">SEC EDGAR</a>
+      or the company's <span class="mono">data.sec.gov</span> link. Parsing happens in your browser. The file is not uploaded.</span>
+      <input type="file" id="file" accept="application/json,.json" class="hidden">
+    </div>
+    <p class="status" id="status" aria-live="polite"></p>
+
+    <details class="adv">
+      <summary>Advanced: load any filer through a CORS proxy</summary>
+      <p class="small muted" style="margin:8px 0 4px">The SEC's XBRL API doesn't send a CORS header, so the browser can't
+      read it directly. If you run a one-line proxy (a Cloudflare Worker that re-serves <span class="mono">data.sec.gov</span>
+      with the header), paste its base URL here. Non-bundled companies will then load without a manual download.
+      The <a href="proxy/worker.js">worker source</a> is included with this site.</p>
+      <div class="advrow">
+        <input type="text" id="proxyUrl" placeholder="https://your-worker.workers.dev">
+        <button class="secondary" id="proxySave" type="button">Save proxy</button>
+      </div>
+    </details>
+  </section>
+
+  <section id="results" class="hidden">
+    <div class="card" id="companyHead" style="margin-bottom:16px"></div>
+
+    <p class="note scoreboard-lead" id="scoreLead"></p>
+    <div class="scorecard" id="scorecard"></div>
+
+    <div class="chartbox" style="margin-top:18px">
+      <div class="charthead">
+        <div>
+          <h3 class="fsub" style="margin:0">Trends over time</h3>
+          <p class="small muted" id="chartHint" style="margin:3px 0 0"></p>
+        </div>
+        <div class="chartmodes" id="chartModes">
+          <button class="seg active" data-preset="growth" type="button">Growth</button>
+          <button class="seg" data-preset="profitability" type="button">Margins</button>
+          <button class="seg" data-preset="returns" type="button">Returns</button>
+          <button class="seg" data-preset="cash" type="button">Cash</button>
+          <button class="seg" data-preset="leverage" type="button">Leverage</button>
+        </div>
+      </div>
+      <div id="metricChips" class="metricchips"></div>
+      <div class="canvas-holder"><canvas id="chart" role="img" aria-label="Selected financial metrics by fiscal year"></canvas></div>
+    </div>
+
+    <div class="tabbar" role="tablist" aria-label="Company analysis">
+      <button id="tab-statements" role="tab" aria-selected="true" aria-controls="panel-statements" data-tab="statements" class="active">Statements</button>
+      <button id="tab-instruments" role="tab" aria-selected="false" aria-controls="panel-instruments" data-tab="instruments">Instruments</button>
+      <button id="tab-forensics" role="tab" aria-selected="false" aria-controls="panel-forensics" data-tab="forensics">Forensics</button>
+      <button id="tab-provenance" role="tab" aria-selected="false" aria-controls="panel-provenance" data-tab="provenance">Provenance</button>
+    </div>
+
+    <div id="panel-statements" class="tabpanel active" role="tabpanel" aria-labelledby="tab-statements" data-tab="statements">
+      <div id="stmtWrap"></div>
+      <p class="small muted" id="stmtNote" style="margin-top:10px"></p>
+    </div>
+
+    <div id="panel-instruments" class="tabpanel" role="tabpanel" aria-labelledby="tab-instruments" data-tab="instruments" hidden>
+      <div id="instWrap"></div>
+      <p class="small muted" style="margin-top:10px">These measures use only the line items in the Statements tab.
+      Day counts use a 365-day year, and the cash conversion cycle is DIO + DSO − DPO. Negative equity can reverse
+      ROE and debt-to-equity. Negative invested capital can do the same to ROIC. Check the balance sheet first.</p>
+    </div>
+
+    <div id="panel-forensics" class="tabpanel" role="tabpanel" aria-labelledby="tab-forensics" data-tab="forensics" hidden>
+      <div class="fcharts" id="fcharts">
+        <div class="fchart"><canvas id="altmanChart" role="img" aria-label="Altman Z double-prime by fiscal year"></canvas></div>
+        <div class="fchart"><canvas id="beneishChart" role="img" aria-label="Beneish M score by fiscal year"></canvas></div>
+        <div class="fchart"><canvas id="piotroskiChart" role="img" aria-label="Piotroski F score by fiscal year"></canvas></div>
+      </div>
+      <div id="forensicsWrap"></div>
+    </div>
+
+    <div id="panel-provenance" class="tabpanel" role="tabpanel" aria-labelledby="tab-provenance" data-tab="provenance" hidden>
+      <div class="toolbar" style="margin-bottom:10px">
+        <label class="small muted" for="provSel">Trace concept:</label>
+        <select id="provSel"></select>
+      </div>
+      <div class="tablewrap" id="provWrap"></div>
+      <p class="small muted" style="margin-top:10px">This table identifies the XBRL fact used for each reported input:
+      tag, frame or form, period end, and filing accession. Calculated instruments combine those reported inputs and are
+      not themselves XBRL facts.</p>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <span>Filing Forensics · data from SEC EDGAR (public domain)</span>
+  <span>Calculated in-browser · reported inputs link to their filings</span>
+</div></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="js/sec.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

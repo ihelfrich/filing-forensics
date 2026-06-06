@@ -1,0 +1,8 @@
+name = "filing-forensics-proxy"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+# No bindings or secrets. This worker only re-serves data.sec.gov/api/xbrl/* with a
+# CORS header. After `wrangler deploy`, paste the printed *.workers.dev URL into the
+# Workbench's Advanced box. Edit the User-Agent email in worker.js before deploying:
+# the SEC asks every automated client to identify itself.

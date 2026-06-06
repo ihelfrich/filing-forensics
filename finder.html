@@ -4,24 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Report Finder · Filing Forensics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-base=".">
 <header class="site-head"><div class="wrap">
   <div class="brand">Filing <b>Forensics</b></div>
-  <nav class="nav">
-    <a href="index.html">Schematic</a>
-    <a href="finder.html" class="active">Report Finder</a>
-    <a href="dissector.html">Filing Dissector</a>
+  <nav class="nav" aria-label="Primary">
+    <a href="app.html">Workbench</a>
+    <a href="finder.html" class="active" aria-current="page">Report Finder</a>
+    <a href="dissector.html">Dissector</a>
+    <a href="index.html">Method</a>
   </nav>
 </div></header>
 
 <main class="wrap">
   <div class="hero" style="padding-bottom:0">
-    <p class="kicker">Phase 2 · Find the reports</p>
-    <h1>Find a company's SEC filings.</h1>
-    <p class="lede">Type a ticker or a company name. This queries the SEC EDGAR submissions API live and lists the
-    annual (10-K), quarterly (10-Q), and event (8-K) filings, each linked straight to the source on sec.gov.</p>
+    <p class="kicker">SEC filing search</p>
+    <h1>Find a company's recent filings.</h1>
+    <p class="lede">Search by ticker or company name. The Finder queries the SEC submissions API and lists recent
+    10-K, 10-Q, 8-K, or all forms with links to the filing document and submission index.</p>
   </div>
 
   <section>
@@ -36,7 +40,7 @@
       <button type="submit">Find filings</button>
     </form>
     <div class="chips" id="quickPicks"></div>
-    <p class="status" id="status"></p>
+    <p class="status" id="status" aria-live="polite"></p>
 
     <div id="candidates"></div>
 
@@ -50,7 +54,7 @@
 
 <footer><div class="wrap">
   <span>Filing Forensics · data from SEC EDGAR (public domain)</span>
-  <span><a href="dissector.html">Next: dissect a filing &rarr;</a></span>
+  <span><a href="app.html">Next: analyze a filing &rarr;</a></span>
 </div></footer>
 
 <script src="js/sec.js"></script>

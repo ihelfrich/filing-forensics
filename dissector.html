@@ -4,40 +4,48 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Filing Dissector · Filing Forensics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-base=".">
 <header class="site-head"><div class="wrap">
   <div class="brand">Filing <b>Forensics</b></div>
-  <nav class="nav">
-    <a href="index.html">Schematic</a>
+  <nav class="nav" aria-label="Primary">
+    <a href="app.html">Workbench</a>
     <a href="finder.html">Report Finder</a>
-    <a href="dissector.html" class="active">Filing Dissector</a>
+    <a href="dissector.html" class="active" aria-current="page">Dissector</a>
+    <a href="index.html">Method</a>
   </nav>
 </div></header>
 
 <main class="wrap">
   <div class="hero" style="padding-bottom:0">
-    <p class="kicker">Phase 3 · Dissect the filing</p>
-    <h1>Turn a filing into a time series and read the instruments.</h1>
+    <p class="kicker">Focused filing view</p>
+    <h1>Build an annual series from SEC XBRL facts.</h1>
     <p class="lede">Load a bundled company to start instantly, or drop in any company's <span class="mono">companyfacts.json</span>
-    from SEC EDGAR. The tool builds an annual series and computes the same instruments used in the Amazon note:
-    operating margin, capex intensity, and the cash conversion cycle.</p>
+    from SEC EDGAR. The tool builds an annual series for revenue, operating margin, capex intensity,
+    and the cash conversion cycle.</p>
+    <p class="small muted" style="margin:10px 0 0">This is the focused view. For returns, free cash flow,
+    the Altman, Beneish, Piotroski, and Sloan screens, plus input-level XBRL provenance,
+    use the <a href="app.html">Workbench</a>.</p>
   </div>
 
   <section>
-    <h2>1 · Load a company</h2>
+    <h2>Load a company</h2>
     <div class="toolbar">
       <span class="small muted">Bundled (instant):</span>
       <span class="chips" id="bundled"></span>
     </div>
+    <div id="bridge" class="hidden"></div>
     <div id="drop" class="dropzone">
-      <b>Or drop a companyfacts.json here</b> (or click to choose a file).<br>
-      <span class="small">Get one from <a href="finder.html">the Report Finder</a> &rarr; the companyfacts link, or
-      <a href="https://www.sec.gov/search-filings" target="_blank" rel="noopener">SEC EDGAR</a>. Parsed entirely in your browser.</span>
+      <b>Drop a companyfacts.json here</b> or <button type="button" class="drop-pick" aria-describedby="dropHelp">choose a file</button>.<br>
+      <span class="small" id="dropHelp">Get one from <a href="finder.html">the Report Finder</a>, or
+      <a href="https://www.sec.gov/search-filings" target="_blank" rel="noopener">SEC EDGAR</a>. Parsing happens in your browser.</span>
       <input type="file" id="file" accept="application/json,.json" class="hidden">
     </div>
-    <p class="status" id="status"></p>
+    <p class="status" id="status" aria-live="polite"></p>
   </section>
 
   <section id="results" class="hidden">
@@ -54,7 +62,7 @@
         <option value="ccc">Cash conversion cycle (days)</option>
       </select>
     </div>
-    <div class="chartbox"><canvas id="chart" height="120"></canvas></div>
+    <div class="chartbox"><canvas id="chart" height="120" role="img" aria-label="Selected financial metric by fiscal year"></canvas></div>
     <div class="note" id="lessonNote"></div>
 
     <h2 style="margin-top:30px">The full series</h2>
@@ -65,7 +73,7 @@
 
 <footer><div class="wrap">
   <span>Filing Forensics · data from SEC EDGAR (public domain)</span>
-  <span>Instruments computed in-browser · verifiable against the filing</span>
+  <span>Calculated in-browser · reported inputs come from SEC XBRL facts</span>
 </div></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
